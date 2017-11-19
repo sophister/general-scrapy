@@ -45,7 +45,8 @@ class GeneralSpider(scrapy.Spider):
         # self.log('Saved file %s' % filename)
         # return
         if self.crawl_type == "html":
-            pass
+            obj = self.handleHTML(response)
+            yield obj
         else:
             if self.crawl_type == "jsonp":
                 content = response.body.strip()
@@ -70,5 +71,24 @@ class GeneralSpider(scrapy.Spider):
                 out.append(temp)
         else:
             out = arr
+        return out
+    
+    def handleHTML(self, response):
+        print response.body
+        out = {}
+
+        if 'output_item' in self.conf:
+            for to_key, from_path in self.conf['output_item'].items():
+                out[to_key] = response.xpath(from_path).extract_first()
+
+        if 'output_list' in self.conf:
+            for i in self.conf['output_list']:
+                out[i['output_key']] = []
+                for item in response.xpath(i['list_path']):
+                    obj = {}
+                    for to_key, from_path in i['items'].items():
+                        obj[to_key] = item.xpath(from_path).extract_first()
+                    out[i['output_key']].append(obj)
+
         return out
             

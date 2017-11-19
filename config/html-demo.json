@@ -1,0 +1,18 @@
+{
+    "crawl_type": "html",
+    "base_url": "https://www.zhihu.com/collection/95089362?%s%s",
+    "args": [
+        ["", ""]
+    ],
+    "output_item": {
+        "title": "//*[@id=\"root\"]/div/main/div/div[1]/div[2]/div[1]/div[1]/h1/text()"
+    },
+    "output_list": [{
+        "list_path": "//*[@id=\"zh-list-collection-wrap\"]/div",
+        "output_key": "list1",
+        "items": {
+            "title": "/h2/a/text()",
+            "link": "/h2/a/@href"
+        }
+    }]
+}
