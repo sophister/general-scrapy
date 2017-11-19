@@ -74,7 +74,7 @@ class GeneralSpider(scrapy.Spider):
         return out
     
     def handleHTML(self, response):
-        print response.body
+        
         out = {}
 
         if 'output_item' in self.conf:
@@ -84,9 +84,12 @@ class GeneralSpider(scrapy.Spider):
         if 'output_list' in self.conf:
             for i in self.conf['output_list']:
                 out[i['output_key']] = []
+                
                 for item in response.xpath(i['list_path']):
                     obj = {}
+        
                     for to_key, from_path in i['items'].items():
+                        
                         obj[to_key] = item.xpath(from_path).extract_first()
                     out[i['output_key']].append(obj)
 

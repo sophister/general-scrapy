@@ -1,18 +1,18 @@
 {
     "crawl_type": "html",
-    "base_url": "https://www.zhihu.com/collection/95089362?%s%s",
+    "base_url": "http://sports.sina.com.cn/l/2017-11-19/doc-ifynwnty5193550.shtml?%s%s",
     "args": [
         ["", ""]
     ],
     "output_item": {
-        "title": "//*[@id=\"root\"]/div/main/div/div[1]/div[2]/div[1]/div[1]/h1/text()"
+        "title": "//*[@id=\"j_title\"]/text()"
     },
     "output_list": [{
-        "list_path": "//*[@id=\"zh-list-collection-wrap\"]/div",
+        "list_path": "//*[@id=\"html\"]/body/div[1]/div[2]/div[1]/article/section/a",
         "output_key": "list1",
         "items": {
-            "title": "/h2/a/text()",
-            "link": "/h2/a/@href"
+            "title": "text()",
+            "link": "@href"
         }
     }]
 }
