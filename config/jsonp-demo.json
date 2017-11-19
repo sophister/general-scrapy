@@ -1,0 +1,15 @@
+{
+    "crawl_type": "jsonp",
+    "base_url": "https://s.taobao.com/search?data-key=s&data-value=88&ajax=true&_ksTS=1511070653325_1037&callback=jsonp1038&spm=a21bo.2017.201856-fline.2.4522f09bXqsIpZ&q=四件套&refpid=420461_1006&source=tbsy&style=grid&tab=all&pvid=d0f2ec2810bcec0d5a16d5283ce59f67&bcoffset=0&p4ppushleft=3,44&s=%s&%s",
+    "args": [
+        ["44", "qq"],
+        ["88", "qq"]
+    ],
+    "jsonp_callback": "jsonp1038",
+    "list_json_path": "$.mods.itemlist.data.auctions[*]",
+    "output_item": {
+        "item_loc": "location",
+        "nick": "nick_name",
+        "not_exist": "aaaaa"
+    }
+}

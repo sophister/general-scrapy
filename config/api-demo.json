@@ -1,0 +1,14 @@
+{
+    "crawl_type": "json",
+    "base_url": "https://gupiao.baidu.com/api/stocks/stockdaybar?from=pc&os_ver=1&cuid=xxx&vv=100&format=json&stock_code=sh000016&step=3&start=%s&count=%s&fq_type=no&timestamp=1511068675871",
+    "args": [
+        ["", "160"],
+        ["20170324", "160"],
+        ["20160711", "320"]
+    ],
+    "list_json_path": "$.mashData[*]",
+    "__output_item": {
+        "from_key1": "output_key1",
+        "from_key2": "output_key2"
+    }
+}
