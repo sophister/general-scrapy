@@ -1,0 +1,18 @@
+{
+    "crawl_type": "json",
+    "base_url": "http://image.baidu.com/search/acjson?tn=resultjson_com&ipn=rj&ct=201326592&is=&fp=result&queryWord=微距摄影&cl=2&lm=-1&ie=utf-8&oe=utf-8&adpicid=&st=-1&z=&ic=0&word=微距摄影&s=&se=&tab=&width=&height=&face=0&istype=2&qc=&nc=1&fr=&pn=#page#&rn=30&gsm=1e&1511668575274=&test=%s%s",
+    "_no_args": [
+        ["1",""],
+        ["2",""],
+        ["3",""]
+    ],
+    "range__comment": "[start, end, step]",
+    "range": [0, 400, 30],
+    "list_json_path": "$.data[*]",
+    "output_item": {
+        "fromPageTitleEnc": "page_title_enc",
+        "thumbURL": "thumb_url",
+        "pageNum": "page_num",
+        "not_exist": "aaaaa"
+    }
+}

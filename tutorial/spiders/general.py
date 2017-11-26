@@ -3,6 +3,7 @@ import scrapy
 import json
 import codecs
 import jsonpath_rw
+import logging
 
 
 class GeneralSpider(scrapy.Spider):
@@ -28,15 +29,44 @@ class GeneralSpider(scrapy.Spider):
         #type: json/jsonp/html
         self.crawl_type = conf['crawl_type']
         self.base_url = conf['base_url']
-        self.args = conf['args']
         self.conf = conf
 
     def start_requests(self):
-        print self.base_url
-        exit
-        for i in self.args:
+        if 'args' in self.conf:
+            url_list = self.handle_args_requests()
+        else:
+            url_list = [self.base_url]
+
+        url_all = []
+
+        if 'range' in self.conf:
+            for url in url_list:
+                new_url_list = self.handle_range_requests(url, self.conf['range'])
+                url_all.extend(new_url_list)
+        else:
+            url_all = url_list
+        # logging.debug("url list is: ")
+        # logging.debug(url_all)
+        
+        return [scrapy.Request(url=url, callback=self.parse) for url in url_all]
+        
+    #处理用户提供了所有的页面循环值
+    def handle_args_requests(self):
+        out = []
+        for i in self.conf['args']:
             url = self.base_url % tuple(i)
-            yield scrapy.Request(url=url, callback=self.parse)
+            out.append(url)
+            # out.append(scrapy.Request(url=url, callback=self.parse))
+        return out
+
+    #处理用户只提供了 起始值，结束值，步进 的情况
+    def handle_range_requests(self, url, page_range):
+        out = []
+        for page in xrange(*page_range):
+            new_url = url
+            new_url = new_url.replace('#page#', str(page))
+            out.append(new_url)
+        return out
 
     def parse(self, response):
         # filename = 'taobao.txt'
