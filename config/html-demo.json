@@ -4,6 +4,9 @@
     "args": [
         ["", ""]
     ],
+    "request_headers": {
+        "x-req-id": "aaaaa"
+    },
     "output_item": {
         "title": "//*[@id=\"j_title\"]/text()"
     },
