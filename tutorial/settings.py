@@ -9,7 +9,7 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'tutorial'
+BOT_NAME = 'general'
 
 SPIDER_MODULES = ['tutorial.spiders']
 NEWSPIDER_MODULE = 'tutorial.spiders'
@@ -50,11 +50,28 @@ ROBOTSTXT_OBEY = False
 #    'tutorial.middlewares.TutorialSpiderMiddleware': 543,
 #}
 
+
+IP_POOLS=[
+    {'ip': '118.144.149.200:3128'},
+    {'ip': '171.108.205.85:55555'},
+    {'ip': '111.155.116.227:8123'},
+	{'ip': '125.46.98.94:1920'},
+]
+
+USERAGENT_POOLS=[
+    'Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3',
+    'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3',
+    'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36',
+]
+
 # Enable or disable downloader middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'tutorial.middlewares.MyCustomDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware':123,
+    'tutorial.middlewares.IpPoolsMiddelware': 124,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': 125,
+    'tutorial.middlewares.UAPoolsMiddelware': 126
+}
 
 # Enable or disable extensions
 # See http://scrapy.readthedocs.org/en/latest/topics/extensions.html
