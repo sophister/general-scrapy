@@ -7,6 +7,43 @@
 
 from scrapy import signals
 
+import random
+import logging
+from scrapy.downloadermiddlewares.httpproxy import HttpProxyMiddleware #代理ip，这是固定的导入
+from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware #代理UA，固定导入
+import settings
+
+class IpPoolsMiddelware(HttpProxyMiddleware):
+
+    def __init__(self,ip=''):
+        self.ip_pools = settings.IP_POOLS
+        self.ip = ip
+
+    def process_request(self, request, spider):
+        ip = random.choice(self.ip_pools)
+        logging.debug('current proxy ip: '+ip['ip'])
+        try:
+            request.meta["proxy"] = "http://"+ip['ip']
+        except Exception,e:
+            print e
+            pass
+
+class UAPoolsMiddelware(UserAgentMiddleware):
+    def __init__(self, ua=''):
+        self.user_agent = ua
+        self.user_agent_pools = settings.USERAGENT_POOLS
+
+    def process_request(self, request, spider):
+        '''使用代理UA，随机选用'''
+        ua = random.choice(self.user_agent_pools)
+        logging.debug('current user-agent: ' + ua)
+        try:
+            request.headers.setdefault('User-Agent',ua)
+        except Exception,e:
+            print e
+            pass
+    
+
 
 class TutorialSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
