@@ -8,18 +8,6 @@ import logging
 
 class GeneralSpider(scrapy.Spider):
     name = "general"
-    custom_settings = {
-        "DEFAULT_REQUEST_HEADERS": {
-            'accept': 'application/json, text/javascript, */*; q=0.01',
-            'accept-encoding': 'gzip, deflate, br',
-            'accept-language': 'zh-CN,zh;q=0.8',
-            'cache-control': 'no-cache',
-            'dnt': '1',
-            'referer': '',
-            'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36',
-            'x-requested-with': 'XMLHttpRequest'
-        }
-    }
 
     def __init__(self, config=None):
         with open(config, "r") as f:
@@ -30,9 +18,11 @@ class GeneralSpider(scrapy.Spider):
         self.base_url = conf['base_url']
         self.conf = conf
 
+        self.headers = {}
+
         # 添加自定义header
         if 'request_headers' in conf:
-            self.custom_settings['DEFAULT_REQUEST_HEADERS'] = conf['request_headers']
+            self.headers = conf['request_headers']
 
     def start_requests(self):
         if 'args' in self.conf:
@@ -50,8 +40,14 @@ class GeneralSpider(scrapy.Spider):
             url_all = url_list
         # logging.debug("url list is: ")
         # logging.debug(url_all)
+
+        headers = self.headers
+        cookies = None
         
-        return [scrapy.Request(url=url, callback=self.parse) for url in url_all]
+        if 'Cookie' in  headers:
+            cookies = headers['Cookie']
+        
+        return [scrapy.Request(url=url, callback=self.parse, headers=headers, cookies=cookies) for url in url_all]
         
     #处理用户提供了所有的页面循环值
     def handle_args_requests(self):

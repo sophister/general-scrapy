@@ -1,0 +1,25 @@
+{
+    "crawl_type": "html",
+    "base_url": "https://github.com/",
+    "request_headers": {
+        
+        "Connection": "keep-alive",
+        "Pragma": "no-cache",
+        "Cache-Control": "no-cache",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3278.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+        "Accept-Language": "zh-CN,zh;q=0.9"
+
+    },
+    "output_item": {
+        "avatar": "//*[@id=\"user-links\"]/li[3]/details/summary/img/@src"
+    },
+    "output_list": [{
+        "list_path": "//*[@id=\"dashboard\"]/div[2]/div[2]/div/ul/li",
+        "output_key": "repo_list",
+        "items": {
+            "repo_name": "a/span[1]/span[2]/text()",
+            "link": "a/@href"
+        }
+    }]
+}
