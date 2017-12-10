@@ -9,24 +9,60 @@ from scrapy import signals
 
 import random
 import logging
-from scrapy.downloadermiddlewares.httpproxy import HttpProxyMiddleware #代理ip，这是固定的导入
+from scrapy.downloadermiddlewares.httpproxy import HttpProxyMiddleware
+from scrapy.core.downloader.handlers.http11 import TunnelError
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware #代理UA，固定导入
 import settings
+import requests
 
 class IpPoolsMiddelware(HttpProxyMiddleware):
 
     def __init__(self,ip=''):
-        self.ip_pools = settings.IP_POOLS
+        self.service = settings.PROXY_SERVICE
+        self.https_proxy_list = []
+        self.http_proxy_list = []
         self.ip = ip
+        self.update_count = 100
 
     def process_request(self, request, spider):
-        ip = random.choice(self.ip_pools)
-        logging.debug('current proxy ip: '+ip['ip'])
-        try:
-            request.meta["proxy"] = "http://"+ip['ip']
-        except Exception,e:
-            print e
-            pass
+        if request.url.find('https://') == 0:
+            proxy_list = self.get_https_proxy()
+        else:
+            proxy_list = self.get_http_proxy()
+
+        if not proxy_list:
+            return
+
+        proxy = random.choice(proxy_list)
+        ip_port = "http://%s:%s" % (proxy[0], proxy[1])
+        request.meta["proxy"] = ip_port
+        logging.debug('current proxy is:' + ip_port)
+
+    def get_http_proxy(self):
+        proxy_list = self.get_proxy(0)
+        if proxy_list:
+            self.http_proxy_list = proxy_list
+
+        return self.http_proxy_list
+
+    def get_https_proxy(self):
+        proxy_list = self.get_proxy(1)
+        if proxy_list:
+            self.https_proxy_list = proxy_list
+
+        return self.https_proxy_list
+
+    def get_proxy(self, protocol):
+        proxy_list = []
+        if self.update_count >= 100:
+            self.update_count = 0 
+            url = self.service + '/?types=0&protocol=' + str(protocol) +'&count=50&country=国内'
+            r = requests.get(self.service)
+            if r.status_code == 200:
+                proxy_list = r.json()
+        self.update_count += 1
+        return proxy_list
+
 
 class UAPoolsMiddelware(UserAgentMiddleware):
     def __init__(self, ua=''):
@@ -43,7 +79,6 @@ class UAPoolsMiddelware(UserAgentMiddleware):
             print e
             pass
     
-
 
 class TutorialSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
